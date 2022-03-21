@@ -22,6 +22,13 @@ public class ExeHDFS {
     String hdfsUrl = "hdfs://119.3.219.46";
     String urlAndPort = "hdfs://119.3.219.46:8020";
 
+//    public static void main(String[] args)throws Exception{
+//        //动态方式，获取abc.txt的绝对路径
+//        String path = ExeHDFS.class.getClassLoader().getResource("upLoad.txt").getPath();
+//        InputStream input = new FileInputStream(path) ;
+//        System.out.println(path);
+//    }
+
     public static void main(String[] args) {
         ExeHDFS testHDFS = new ExeHDFS();
         try {
@@ -67,7 +74,8 @@ public class ExeHDFS {
         //加载配置文件
         FileSystem hdfs = FileSystem.get(new URI(hdfsUrl), conf, "root");
         //获取本地文件的一个输入流,就是把upload.txt文件上传
-        InputStream in = new FileInputStream("Documents/upload.txt");
+//        InputStream in = new FileInputStream("src/main/resources/upload.txt");
+        InputStream in = getClass().getClassLoader().getResourceAsStream("upload.txt");
         //获取一个输出流,输出到hadoop服务器
         OutputStream out = hdfs.create(new Path(hdfsPath + "upLoad_2019211565.txt"));
         IOUtils.copyBytes(in, out, conf);
@@ -84,7 +92,7 @@ public class ExeHDFS {
         conf.set("fs.defaultFS", urlAndPort);
         //待写入文件内容
         //写入自己的姓名与学号信息
-        byte[] buff = "Hello world! My name is zqs(钟楸森), my student id is 2019211565.".getBytes();
+        byte[] buff = "Hello world! My name is zqs, my student id is 2019211565.".getBytes();
         //FileSystem为HDFS的API,通过此调用HDFS
         FileSystem hdfs = FileSystem.get(new URI(hdfsUrl), conf, "root");
         //文件目标路径，应填写hdfs文件路径
@@ -122,7 +130,8 @@ public class ExeHDFS {
         //加载要下载的文件
         InputStream in = hdfs.open(new Path(hdfsPath + "zqs_2019211565.txt"));
         //下载到工程的Documents文件夹下
-        OutputStream out = new FileOutputStream("Documents/downLoad.2019211565.txt");
+        OutputStream out = new FileOutputStream("src/main/resources/downLoad.2019211565.txt");
+//        OutputStream out = getClass().getClassLoader()("downLoad.2019211565.txt");
         IOUtils.copyBytes(in, out, conf);
         System.out.println("DownLoad successfully!");
     }
