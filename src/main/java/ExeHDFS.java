@@ -49,6 +49,8 @@ public class ExeHDFS {
         Configuration conf = new Configuration();
         conf.set("dfs.client.use.datanode.hostname", "true");
         conf.set("fs.defaultFS", urlAndPort);
+        conf.set("fs.hdfs.impl", "org.apache.hadoop.hdfs.DistributedFileSystem");
+
         //加载配置文件
         FileSystem hdfs = FileSystem.get(new URI(hdfsUrl), conf, "root");
 
@@ -71,6 +73,7 @@ public class ExeHDFS {
         Configuration conf = new Configuration();
         conf.set("dfs.client.use.datanode.hostname", "true");
         conf.set("fs.defaultFS", urlAndPort);
+        conf.set("fs.hdfs.impl", "org.apache.hadoop.hdfs.DistributedFileSystem");
         //加载配置文件
         FileSystem hdfs = FileSystem.get(new URI(hdfsUrl), conf, "root");
         //获取本地文件的一个输入流,就是把upload.txt文件上传
@@ -88,8 +91,11 @@ public class ExeHDFS {
         System.out.println("==============================================================");
         System.out.println("Write file:");
         Configuration conf = new Configuration();
+
         conf.set("dfs.client.use.datanode.hostname", "true");
+
         conf.set("fs.defaultFS", urlAndPort);
+        conf.set("fs.hdfs.impl", "org.apache.hadoop.hdfs.DistributedFileSystem");
         //待写入文件内容
         //写入自己的姓名与学号信息
         byte[] buff = "Hello world! My name is zqs, my student id is 2019211565.".getBytes();
@@ -125,12 +131,12 @@ public class ExeHDFS {
         Configuration conf = new Configuration();
         conf.set("dfs.client.use.datanode.hostname", "true");
         conf.set("fs.defaultFS", urlAndPort);
-
+        conf.set("fs.hdfs.impl", "org.apache.hadoop.hdfs.DistributedFileSystem");
         FileSystem hdfs = FileSystem.get(new URI(hdfsUrl), conf, "root");
         //加载要下载的文件
         InputStream in = hdfs.open(new Path(hdfsPath + "zqs_2019211565.txt"));
-        //下载到工程的Documents文件夹下
-        OutputStream out = new FileOutputStream("src/main/resources/downLoad.2019211565.txt");
+        //下载文件
+        OutputStream out = new FileOutputStream("/downLoad.2019211565.txt");
 //        OutputStream out = getClass().getClassLoader()("downLoad.2019211565.txt");
         IOUtils.copyBytes(in, out, conf);
         System.out.println("DownLoad successfully!");
